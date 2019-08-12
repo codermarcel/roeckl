@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 	"roeckl/backend/token"
@@ -112,7 +113,10 @@ func main() {
 	}))
 
 	ec.Debug = debug
-	ec.HideBanner = !debug
+	ec.HideBanner = true
+	fmt.Println("-----Configuration-----")
+	fmt.Printf("Fresh: %t\nDebug: %t\n Port: %s\n", fresh, debug, port)
+	fmt.Println("-----Configuration-----")
 
 	ec.Static("/", "build")
 	e := ec.Group(backendApiPrefix)
@@ -131,13 +135,13 @@ func main() {
 
 	waiter := e.Group("/waiter", app.EnsureAuthenticated, app.EnsureHasRole(string(WaiterRole)))
 	waiter.Any("/purchase", app.WaiterPurchase)
-	waiter.Any("/order/cancel", app.CancelOrder)
-	waiter.Any("/order/paid", app.MarkOrderPaid)
+	waiter.Any("/order/cancel", app.WaiterCancelOrder)
+	waiter.Any("/order/paid", app.WaiterMarkOrderPaid)
 	waiter.Any("/order", app.WaiterListOrder)
 	waiter.Any("/orders", app.WaiterListOrders)
 
 	owner := e.Group("/owner", app.EnsureAuthenticated, app.EnsureHasRole(string(OwnerRole)))
-	owner.Any("/create-product", app.CreateProduct)
+	owner.Any("/create-product", app.OwnerCreateProduct)
 	owner.Any("/order/cancel", app.OwnerCancelOrder)
 	owner.Any("/order/paid", app.OwnerMarkOrderPaid)
 	owner.Any("/order", app.OwnerListOrder)
@@ -150,7 +154,7 @@ func main() {
 	chef := e.Group("/chef", app.EnsureAuthenticated, app.EnsureHasRole(string(ChefRole)))
 	chef.Any("/order", app.ChefListOrder)
 	chef.Any("/orders", app.ChefListOrders)
-	chef.Any("/order/cancel", app.CancelOrder)
+	chef.Any("/order/cancel", app.ChefCancelOrder)
 
 	ec.Logger.Fatal(ec.Start(":" + port))
 }

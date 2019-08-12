@@ -15,7 +15,6 @@ const axiosInstane = Axios.create({
 
 axiosInstane.interceptors.request.use(function (config) {
     config.headers["Authorization"] = auth.jwt
-    config.headers["Host"] = "backend"
     return config;
   }, function (error) {
     return Promise.reject(error);
