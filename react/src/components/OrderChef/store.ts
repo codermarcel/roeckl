@@ -40,7 +40,7 @@ export class OrderStore {
         .then((response) => {
             if (response.data.success) {
                 msgStore.setSuccess("Success! Order canceled")
-                history.push("/orders-waiter")
+                history.push("/orders-chef")
             }else {
                 msgStore.setFail(response.data.message)
             }

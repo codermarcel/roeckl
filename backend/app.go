@@ -578,16 +578,20 @@ func (a App) WaiterListOrder(c echo.Context) error {
 }
 
 func (a App) WaiterListOrders(c echo.Context) error {
+	fmt.Println("inside WaiterListOrders first")
 	userid, ok := GetUserId(c)
 	if !ok {
+		fmt.Println("inside WaiterListOrders not ok", userid, ok)
 		return c.JSON(http.StatusOK, FailNotAuthenticated())
 	}
 
+	fmt.Println("inside WaiterListOrders")
 	user, err := a.UserRepo.FindById(userid)
 	if err != nil {
 		return c.JSON(http.StatusOK, FailUserNotFound())
 	}
 
+	fmt.Println("inside WaiterListOrders 2222")
 	var limit int64 = 100
 
 	u := &PaginationRequest{}
@@ -747,6 +751,10 @@ func (a App) OwnerUpdateProduct(c echo.Context) error {
 		return c.JSON(http.StatusOK, BadRequest(err.Error()))
 	}
 
+	if err := ValidProductCategory(u.Category); err != nil {
+		return c.JSON(http.StatusOK, BadRequest(err.Error()))
+	}
+
 	tx := a.DB.Begin()
 	txRepo := ProductRepo{DB: tx}
 
@@ -758,7 +766,7 @@ func (a App) OwnerUpdateProduct(c echo.Context) error {
 		return c.JSON(http.StatusOK, Fail("could not find product with id "+u.ID))
 	}
 
-	prod.EditDetails(u.Name, u.Description, u.Price, u.Quantity, u.Disabled)
+	prod.EditDetails(u.Name, u.Description, u.Price, u.Quantity, u.Disabled, u.Category)
 
 	avatar, err := c.FormFile("avatar")
 	if err == nil {

@@ -26,13 +26,15 @@ func NewProduct(name, description, category string, avatar []byte, price int64, 
 	}
 }
 
-func (p *Product) EditDetails(newName, newDesc string, newPrice, newQuantity int64, disabled bool) {
+func (p *Product) EditDetails(newName, newDesc string, newPrice, newQuantity int64, disabled bool, category string) {
 	p.Disabled = disabled
 	p.Name = newName
 	p.Description = newDesc
 	p.Quantity = newQuantity
 	p.Price = newPrice
+	p.Category = category
 }
+
 func (p *Product) SetAvatar(avatar []byte) {
 	p.Avatar = avatar
 }
