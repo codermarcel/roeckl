@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { Container, Menu } from 'semantic-ui-react';
 import LogoutItem from "../itemLogout"
+import ProfileItem from '../itemProfile';
 
 @observer
 class MenuComp extends Component<RouteComponentProps> {
@@ -20,12 +21,12 @@ class MenuComp extends Component<RouteComponentProps> {
         let activeItem = this.props.location.pathname
         return (
             <Container>
+                <ProfileItem/>
                 <Menu.Item 
                     name='tables' active={activeItem === '/tables' || activeItem === '/tables'} 
                     onClick={this.changeActiveItem} 
                     style={{ padding: '1em 3em' }}
                 />
-
                 <Menu.Item 
                     name='orders' active={activeItem === '/orders-waiter' || activeItem === '/orders-waiter'} 
                     onClick={(e) => this.change("/orders-waiter")} 

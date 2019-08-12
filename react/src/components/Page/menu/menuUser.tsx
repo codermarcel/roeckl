@@ -16,13 +16,12 @@ class MenuComp extends Component<RouteComponentProps> {
         let activeItem = this.props.location.pathname
         return (
             <Container>
+                <ProfileItem/>
                 <Menu.Item 
                     name='products' active={activeItem === '/products' || activeItem === '/'} 
                     onClick={this.changeActiveItem} 
                     style={{ padding: '1em 3em' }}
                 />
-
-                <ProfileItem/>
 
                 <Menu.Item 
                     name='orders' active={activeItem === '/orders'} 
