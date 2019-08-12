@@ -1,0 +1,281 @@
+string - main.role
+string - main.orderStatus
+@startuml
+namespace main {
+    class ListOrderRequest << (S,Aquamarine) >> {
+        + OrderID string
+
+    }
+    class OrderProducts << (S,Aquamarine) >> {
+        + ID string
+        + OrderID string
+        + UserID string
+        + ProductID string
+        + ProductName string
+        + Quantity int64
+        + CentsPaid int64
+        + CreatedAt int64
+        + Note string
+
+    }
+    class LoginRequest << (S,Aquamarine) >> {
+        + Email string
+        + Password string
+
+    }
+    class RegisterRequest << (S,Aquamarine) >> {
+        + Email string
+        + Username string
+        + Password string
+
+    }
+    class UpdateProductRequest << (S,Aquamarine) >> {
+        + Avatar []byte
+        + Details string
+
+    }
+    class ProductRepo << (S,Aquamarine) >> {
+        + DB *gorm.DB
+
+        + Save(p Product) error
+        + Delete(p Product) error
+        + FindById(id string) (*Product, error)
+        + FindEnabledProductsWithCategory(offset int64, limit int64, category string) ([]Product, int64, error)
+        + FindCategories() ([]res, error)
+        + FindProductsByIds(ids []string, offset int64, limit int64) ([]Product, error)
+        + FindProductsForOwnerWithCategory(offset int64, limit int64, category string) ([]Product, int64, error)
+
+    }
+    class WantedProductsRequest << (S,Aquamarine) >> {
+        + ID string
+        + Quantity int64
+
+    }
+    class Response << (S,Aquamarine) >> {
+        + Success bool
+        + Message string
+        + Data <font color=blue>interface</font>{}
+
+    }
+    class UserRepo << (S,Aquamarine) >> {
+        + DB *gorm.DB
+
+        + FindByEmail(input string) (*User, error)
+        + FindById(input string) (*User, error)
+        + Save(user User) error
+
+    }
+    class MarkOrderPaidRequest << (S,Aquamarine) >> {
+        + OrderID string
+
+    }
+    class User << (S,Aquamarine) >> {
+        + ID string
+        + Username string
+        + Email string
+        + PasswordHash []byte
+        + Role string
+        + CreatedAt int64
+
+        - setRole(r role) 
+
+        + SetCustomerRole() 
+        + SetWaiterRole() 
+        + SetOwnerRole() 
+        + SetChefRole() 
+
+    }
+    class main.role << (T, #FF7700) >>  {
+    }
+    class ListProductsRequest << (S,Aquamarine) >> {
+        + Page int64
+        + Category string
+
+    }
+    class Order << (S,Aquamarine) >> {
+        + ID string
+        + UserID string
+        + CreatedAt int64
+        + UpdatedAt int64
+        + OrderStatus string
+        + TotalCost int64
+        + TableID int64
+        + IsShipped bool
+        + ShippingFirstName string
+        + ShippingLastName string
+        + ShippingStreet string
+        + ShippingAddress string
+        + ShippingPhone string
+        + ShippingInfo string
+
+        - setOrderStatus(s orderStatus) 
+
+        + SetStatusCanceled() 
+        + SetStatusProcessing() 
+        + SetStatusPaid() 
+        + SetShipping(fn string, ln string, ad string, st string, ph string, info string) 
+        + SetTable(tableid int64) 
+
+    }
+    class main.orderStatus << (T, #FF7700) >>  {
+    }
+    class OrderRepo << (S,Aquamarine) >> {
+        + DB *gorm.DB
+
+        + Save(p Order) error
+        + FindById(id string) (*Order, error)
+        + FindOrdersForOwner(limit int64, offset int64) ([]Order, int64, error)
+        + FindOrdersForChef(limit int64, offset int64) ([]Order, int64, error)
+        + FindOrdersForUserWithId(id string, limit int64, offset int64) ([]Order, int64, error)
+        + FindOrdersForUserWithIdAndStatusProcessing(id string, limit int64, offset int64) ([]Order, int64, error)
+
+    }
+    class WaiterWantedProductsRequest << (S,Aquamarine) >> {
+        + ID string
+        + Quantity int64
+        + Note string
+
+    }
+    class res << (S,Aquamarine) >> {
+        + Category string
+
+    }
+    class CreateProductDetails << (S,Aquamarine) >> {
+        + Name string
+        + Price int64
+        + Description string
+        + Quantity int64
+        + Disabled bool
+        + Category string
+
+    }
+    class UpdateProductDetails << (S,Aquamarine) >> {
+        + ID string
+        + Name string
+        + Price int64
+        + Description string
+        + Quantity int64
+        + Disabled bool
+        + Category string
+
+    }
+    class ShippingInfoRequest << (S,Aquamarine) >> {
+        + FirstName string
+        + LastName string
+        + Address string
+        + Street string
+        + Phone string
+        + Info string
+
+    }
+    class CancelOrderRequest << (S,Aquamarine) >> {
+        + OrderID string
+
+    }
+    class Product << (S,Aquamarine) >> {
+        + ID string
+        + Name string
+        + Price int64
+        + Avatar []byte
+        + Description string
+        + Category string
+        + Quantity int64
+        + CreatedAt int64
+        + Disabled bool
+
+        + EditDetails(newName string, newDesc string, newPrice int64, newQuantity int64, disabled bool) 
+        + SetAvatar(avatar []byte) 
+        + Enable() 
+        + Disable() 
+        + DecreaseQuantity(amount int64) 
+        + IncreaseQuantity(amount int64) 
+
+    }
+    class BcryptHasher << (S,Aquamarine) >> {
+        + Cost int
+
+        + Hash(pw string) ([]byte, error)
+        + Verify(passwordHash []byte, input string) bool
+
+    }
+    class App << (S,Aquamarine) >> {
+        + DB *gorm.DB
+        + Tokenizer token.Tokenizer
+        + Hasher BcryptHasher
+        + UserRepo UserRepo
+        + ProductRepo ProductRepo
+        + OrderRepo OrderRepo
+        + DebugEnabled bool
+        + JwtExpireMinutes int64
+
+        - debug(str string) 
+
+        + ListCategories(c echo.Context) error
+        + GetAvatar(c echo.Context) error
+        + Login(c echo.Context) error
+        + Register(c echo.Context) error
+        + CreateProduct(c echo.Context) error
+        + Profile(c echo.Context) error
+        + PurchaseProducts(c echo.Context) error
+        + ListOrders(c echo.Context) error
+        + ListOrder(c echo.Context) error
+        + ListProducts(c echo.Context) error
+        + CancelOrder(c echo.Context) error
+        + MarkOrderPaid(c echo.Context) error
+        + WaiterPurchase(c echo.Context) error
+        + WaiterListOrder(c echo.Context) error
+        + WaiterListOrders(c echo.Context) error
+        + OwnerCancelOrder(c echo.Context) error
+        + OwnerMarkOrderPaid(c echo.Context) error
+        + OwnerListOrder(c echo.Context) error
+        + OwnerListOrders(c echo.Context) error
+        + OwnerListProducts(c echo.Context) error
+        + OwnerListCategories(c echo.Context) error
+        + OwnerDeleteProduct(c echo.Context) error
+        + OwnerUpdateProduct(c echo.Context) error
+        + ChefListOrders(c echo.Context) error
+        + ChefListOrder(c echo.Context) error
+        + EnsureAuthenticated(next echo.HandlerFunc) echo.HandlerFunc
+        + EnsureHasRole(claimValue string) <font color=blue>func</font>(echo.HandlerFunc) echo.HandlerFunc
+
+    }
+    class CreateProductRequest << (S,Aquamarine) >> {
+        + Avatar []byte
+        + Details string
+
+    }
+    class WaiterPurchaseProductsRequest << (S,Aquamarine) >> {
+        + ExpectedPrice int64
+        + TableID int64
+        + Products []WaiterWantedProductsRequest
+
+    }
+    class OrderProductsRepo << (S,Aquamarine) >> {
+        + DB *gorm.DB
+
+        + Save(p OrderProducts) error
+        + FindByOrderIdForUserId(id string, userid string) ([]OrderProducts, error)
+        + FindByOrderIdForOwner(id string) ([]OrderProducts, error)
+        + FindByOrderIdForChef(id string) ([]OrderProducts, error)
+
+    }
+    class DeleteProductRequest << (S,Aquamarine) >> {
+        + ProductID string
+
+    }
+    class PurchaseProductsRequest << (S,Aquamarine) >> {
+        + ExpectedPrice int64
+        + Shipping ShippingInfoRequest
+        + Products []WantedProductsRequest
+
+    }
+    class PaginationRequest << (S,Aquamarine) >> {
+        + Page int64
+
+    }
+}
+
+
+__builtin__.string #.. main.role
+__builtin__.string #.. main.orderStatus
+@enduml
