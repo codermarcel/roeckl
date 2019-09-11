@@ -21,7 +21,7 @@ export class OrderStore {
         axiosInstane.post("/user/order", data)
         .then((response) => {
             if (response.data.success) {
-                msgStore.setSuccess("Success! Order Products loaded")
+                msgStore.setLog("Success! Order Products loaded")
                 this.orderProducts = response.data.data
             }else {
                 msgStore.setFail(response.data.message)

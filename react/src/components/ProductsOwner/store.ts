@@ -67,7 +67,7 @@ export class ProductStore {
         return axiosInstane.get("/owner/products?page=" + (this.page - 1) + "&category=" + this.selectedCategory)
         .then((response) => {
             if (response.data.success) {
-                msgStore.setSuccess("Successfully loaded Products for owner")
+                msgStore.setLog("Successfully loaded Products for owner")
                 this.page = response.data.data.page + 1
                 this.hasMore = response.data.data.hasMore
                 let p = response.data.data.products.map((item) => {
@@ -88,7 +88,7 @@ export class ProductStore {
         return axiosInstane.get("/owner/categories")
         .then((response) => {
             if (response.data.success) {
-                msgStore.setSuccess("Successfully loaded categories")
+                msgStore.setLog("Successfully loaded categories")
                 this.categories = response.data.data
             }else {
                 msgStore.setFail(response.data.message)

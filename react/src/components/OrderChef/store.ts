@@ -21,7 +21,7 @@ export class OrderStore {
         axiosInstane.post("/chef/order", data)
         .then((response) => {
             if (response.data.success) {
-                msgStore.setSuccess("Success! Order Products loaded")
+                msgStore.setLog("Success! Order Products loaded")
                 this.orderProducts = response.data.data
             }else {
                 msgStore.setFail(response.data.message)
@@ -39,7 +39,7 @@ export class OrderStore {
         axiosInstane.post("/chef/order/cancel", data)
         .then((response) => {
             if (response.data.success) {
-                msgStore.setSuccess("Success! Order canceled")
+                msgStore.setLog("Success! Order canceled")
                 history.push("/orders-chef")
             }else {
                 msgStore.setFail(response.data.message)

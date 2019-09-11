@@ -45,7 +45,7 @@ export class CartStore {
         }
 
         this.cartItems.set(p.id, {...p, wantedQuantity: 1})
-        msgStore.setSuccess("Product added to cart!")
+        msgStore.setLog("Product added to cart!")
         return true
     }
 

@@ -111,7 +111,7 @@ export class OrderStore {
         axiosInstane.post("/owner/orders?page=" +this.page, data)
         .then((response) => {
             if (response.data.success) {
-                msgStore.setSuccess("Success! Order history loaded")
+                msgStore.setLog("Success! Order history loaded")
                 this.setMap(response.data.data.orders)
             }else {
                 msgStore.setFail(response.data.message)

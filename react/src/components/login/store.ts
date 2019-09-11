@@ -27,7 +27,7 @@ export class AuthStore {
         axiosInstane.post("/login", data)
         .then((response) => {
             if (response.data.success) {
-                msgStore.setSuccess("Successfully logged in!")
+                msgStore.setLog("Successfully logged in!")
                 let u = response.data.data.user
                 let jwt = response.data.data.jwt
                 authStore.setAuthenticated(u.username, u.email, u.id, u.role, jwt)

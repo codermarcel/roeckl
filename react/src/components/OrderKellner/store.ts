@@ -21,7 +21,7 @@ export class OrderStore {
         axiosInstane.post("/waiter/order", data)
         .then((response) => {
             if (response.data.success) {
-                msgStore.setSuccess("Success! Order Products loaded")
+                msgStore.setLog("Success! Order Products loaded")
                 this.orderProducts = response.data.data
             }else {
                 msgStore.setFail(response.data.message)
@@ -39,7 +39,7 @@ export class OrderStore {
         axiosInstane.post("/waiter/order/cancel", data)
         .then((response) => {
             if (response.data.success) {
-                msgStore.setSuccess("Success! Order canceled")
+                msgStore.setLog("Success! Order canceled")
                 history.push("/orders-waiter")
             }else {
                 msgStore.setFail(response.data.message)
@@ -57,7 +57,7 @@ export class OrderStore {
         axiosInstane.post("/waiter/order/paid", data)
         .then((response) => {
             if (response.data.success) {
-                msgStore.setSuccess("Success! Order marked as paid!")
+                msgStore.setLog("Success! Order marked as paid!")
                 history.push("/orders-waiter")
             }else {
                 msgStore.setFail(response.data.message)

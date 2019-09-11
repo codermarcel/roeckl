@@ -2,7 +2,7 @@ import { observable, computed, action } from "mobx"
 import config from "./config";
 
 export class MessageStore {
-    @observable type: "success" | "info" | "fail" = "info"
+    @observable type: "success" | "info" | "fail" | "log" = "info"
     @observable message: string = ""
     @observable visible: boolean = false
     private toDismiss: string = "n/a"
@@ -26,9 +26,13 @@ export class MessageStore {
         }
     }
 
-    @action.bound private setMessage(type: "success" | "info" | "fail", msg: string) {
+    @action.bound private setMessage(type: "success" | "info" | "fail" | "log", msg: string) {
         if (config.isDebugMode) {
             console.log("setting message", type, msg)
+        }
+
+        if (type === "log") {
+            return
         }
 
         if (this.message === msg) {
@@ -54,6 +58,9 @@ export class MessageStore {
     }
     @action.bound setInfo(msg: string) {
         this.setMessage("info", msg)
+    }
+    @action.bound setLog(msg: string) {
+        this.setMessage("log", msg)
     }
 
     @action.bound dismiss() {

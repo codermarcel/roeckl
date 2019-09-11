@@ -77,7 +77,7 @@ export class CreateProductStore {
         axiosInstane.post("/owner/create-product", fd)
         .then((response) => {
             if (response.data.success) {
-                msgStore.setSuccess("Successfully created Product!")
+                msgStore.setLog("Successfully created Product!")
                 return
             }
             msgStore.setFail(response.data.message)
