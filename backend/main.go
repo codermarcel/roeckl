@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"os"
 	"roeckl/backend/token"
 	"strconv"
 	"strings"
@@ -26,12 +25,22 @@ func main() {
 	var migrateDown bool
 	var seed bool
 	var fresh bool
+	var port string
+	var secret string
+	var dbconnection string
+	var dbdriver string
+	var jwtexpireminutes string
 
 	flag.BoolVar(&debug, "debug", true, "enable debug mode")
 	flag.BoolVar(&migrateUp, "up", false, "run the up migrations")
 	flag.BoolVar(&migrateDown, "down", false, "run the down migrations")
 	flag.BoolVar(&seed, "seed", false, "seed the database")
 	flag.BoolVar(&fresh, "fresh", false, "run the down migration, run the up migration and then seed the database")
+	flag.StringVar(&port, "port", "1111", "the port that this app should listen on")
+	flag.StringVar(&secret, "secret", "12345678901234567890123456789012", "the application secret, used for jwt validation")
+	flag.StringVar(&dbconnection, "dbconnection", "test.db", "the connection string for the database driver")
+	flag.StringVar(&dbdriver, "dbdriver", "sqlite3", "the database driver, for example sqlite3, mysql, postgres")
+	flag.StringVar(&jwtexpireminutes, "jwtexpireminutes", "300", "in how many minutes should this jwt expire")
 	flag.Parse()
 
 	if fresh {
@@ -40,38 +49,18 @@ func main() {
 		seed = true
 	}
 
-	jwtExpire, err := strconv.Atoi(os.Getenv("JWT_EXPIRE_MINUTES"))
+	jwtExpire, err := strconv.Atoi(jwtexpireminutes)
 	if err != nil || jwtExpire < 1 {
 		jwtExpire = 300
 	}
 
 	jwtExpire64 := int64(jwtExpire)
 
-	secret := os.Getenv("SECRET")
-	if secret == "" {
-		secret = "12345678901234567890123456789012"
-	}
-
 	if len(secret) != 32 {
 		panic("Secret needs to be 32 characters")
 	}
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "1111"
-	}
-
-	dbConnection := os.Getenv("db-connection")
-	if dbConnection == "" {
-		dbConnection = "test.db"
-	}
-
-	dbDriver := os.Getenv("db-driver")
-	if dbDriver == "" {
-		dbDriver = "sqlite3"
-	}
-
-	db, err := gorm.Open(dbDriver, dbConnection)
+	db, err := gorm.Open(dbdriver, dbconnection)
 	if err != nil {
 		panic("failed to connect database")
 	}
