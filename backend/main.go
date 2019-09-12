@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/gobuffalo/packr"
 	"github.com/namsral/flag"
 
 	"github.com/jinzhu/gorm"
@@ -118,7 +119,12 @@ func main() {
 	fmt.Printf("Fresh: %t\nDebug: %t\n Port: %s\n", fresh, debug, port)
 	fmt.Println("-----Configuration-----")
 
-	ec.Static("/", "build")
+	box := packr.NewBox("../react/build")
+
+	fs := http.FileServer(box)
+	ec.Any("/*", echo.WrapHandler(fs))
+
+	// ec.Static("/", "build")
 	e := ec.Group(backendApiPrefix)
 
 	e.Any("/login", app.Login)

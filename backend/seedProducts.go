@@ -1,10 +1,9 @@
 package main
 
 import (
-	"io/ioutil"
-	"os"
 	"strconv"
 
+	"github.com/gobuffalo/packr"
 	"github.com/jinzhu/gorm"
 )
 
@@ -15,21 +14,18 @@ const (
 	dessert = "Dessert"
 )
 
-func getProductImage(id string) []byte {
-	f, err := os.Open("pictures/food/" + id + ".jpeg")
+func getProductImage(box packr.Box, id string) []byte {
+	data, err := box.Find("food/" + id + ".jpeg")
 	if err != nil {
-		panic(err)
-	}
-
-	data, err := ioutil.ReadAll(f)
-	if err != nil {
-		panic(err)
+		panic(err.Error())
 	}
 
 	return data
 }
 
 func CreateFunc(db *gorm.DB) func(name, description, category string, pictureName int, price int64, quantity int64) {
+	box := packr.NewBox("./pictures")
+
 	return func(name, description, category string, pictureName int, price int64, quantity int64) {
 		p := Product{
 			ID:          UUID4(),
@@ -40,7 +36,7 @@ func CreateFunc(db *gorm.DB) func(name, description, category string, pictureNam
 			Price:       price,
 			Quantity:    quantity,
 			Disabled:    false,
-			Avatar:      getProductImage(strconv.Itoa(pictureName)),
+			Avatar:      getProductImage(box, strconv.Itoa(pictureName)),
 		}
 
 		db.Create(&p)
