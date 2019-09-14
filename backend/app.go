@@ -30,6 +30,9 @@ func (a App) debug(str string) {
 	}
 }
 
+func (a App) Test(c echo.Context) error {
+	return c.JSON(http.StatusOK, "test")
+}
 func (a App) ListCategories(c echo.Context) error {
 	cat, err := a.ProductRepo.FindCategories()
 	if err != nil {
@@ -112,7 +115,7 @@ func (a App) Register(c echo.Context) error {
 
 	if err != nil {
 		a.debug(err.Error())
-		return c.JSON(http.StatusOK, Fail("Could not register"))
+		return c.JSON(http.StatusOK, Fail("Could not register, Maybe the username or email has already been taken"))
 	}
 
 	return c.JSON(http.StatusOK, Success("Success!", map[string]string{"id": user.ID, "email": user.Email}))

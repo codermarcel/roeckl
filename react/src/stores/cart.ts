@@ -40,7 +40,7 @@ export class CartStore {
     //alias
     @action.bound addProduct(p: ProductInterface) {
         if (this.cartItems.get(p.id) !== undefined) {
-            msgStore.setInfo("Product is already in cart")
+            msgStore.setInfo("Product is already in cart (you can change the quantity on the cart page)")
             return true
         }
 

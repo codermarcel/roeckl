@@ -25,7 +25,7 @@ class TestApp extends React.Component<MyProps> {
         return (
             <Page>
                 <Container style={{marginTop: "2em"}}>
-                    <Header size="huge" as='h2'>#{orderID}</Header>
+                    {/* <Header size="huge" as='h2'>#{orderID}</Header> */}
                     <Divider />
                     <Header size="huge" attached='top' as='h3' block color="blue">
                     Ordered {convertedUnix}

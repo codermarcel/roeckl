@@ -18,7 +18,7 @@ class OrderItem extends React.Component<OrderProps> {
             <Table basic="very" striped size="large" style={{padding: "1em 1em"}}>
                 <Table.Header>
                 <Table.Row>
-                    <Table.HeaderCell>Produt ID</Table.HeaderCell>
+                    {/* <Table.HeaderCell>Produt ID</Table.HeaderCell> */}
                     <Table.HeaderCell>Produt Name</Table.HeaderCell>
                     <Table.HeaderCell>Product Quantity</Table.HeaderCell>
                     <Table.HeaderCell>Note</Table.HeaderCell>
@@ -30,7 +30,7 @@ class OrderItem extends React.Component<OrderProps> {
                     
                 {products.map((value, key) => (
                     <Table.Row key={value.id}>
-                        <Table.Cell>{value.id}</Table.Cell>
+                        {/* <Table.Cell>{value.id}</Table.Cell> */}
                         <Table.Cell>{value.product_name}</Table.Cell>
                         <Table.Cell>{value.quantity}</Table.Cell>
                         <Table.Cell>{value.note}</Table.Cell>

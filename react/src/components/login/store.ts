@@ -5,8 +5,8 @@ import msgStore from "../../stores/message";
 import authStore from "../../stores/auth"
 
 export class AuthStore {
-    @observable email: string = "tim@waiter.com"
-    @observable password: string = "123456"
+    @observable email: string = ""
+    @observable password: string = ""
     @observable emailError = null
     @observable passwordError = null
 

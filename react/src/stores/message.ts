@@ -35,7 +35,7 @@ export class MessageStore {
             return
         }
 
-        if (this.message === msg) {
+        if (this.message == msg) {
             msg = msg + " (!)"
         }else {
             msg = msg

@@ -82,6 +82,14 @@ func main() {
 	Seed(db, seed)
 
 	ec := echo.New()
+	box := packr.NewBox("../react/build")
+	// fs := http.FileServer(box)
+
+	static(box, ec, "/", "")
+
+	// ec.Any("/*", echo.WrapHandler(fs))
+
+	// ec.Static("/", "build")
 
 	ec.HTTPErrorHandler = func(err error, c echo.Context) {
 		if c.Request().URL == nil {
@@ -89,8 +97,15 @@ func main() {
 			return
 		}
 
+		fmt.Println("inside the HTTPErrorHandler")
+
 		if !strings.HasPrefix(c.Request().URL.Path, backendApiPrefix) {
-			c.File("build/index.html")
+			b, err := box.Find("index.html")
+			if err != nil {
+				return
+			}
+			c.Blob(http.StatusOK, "text/html", b)
+			// c.File("build/index.html")
 			return
 		}
 
@@ -108,12 +123,6 @@ func main() {
 	fmt.Printf("Fresh: %t\nDebug: %t\n Port: %s\n", fresh, debug, port)
 	fmt.Println("-----Configuration-----")
 
-	box := packr.NewBox("../react/build")
-
-	fs := http.FileServer(box)
-	ec.Any("/*", echo.WrapHandler(fs))
-
-	// ec.Static("/", "build")
 	e := ec.Group(backendApiPrefix)
 
 	e.Any("/login", app.Login)

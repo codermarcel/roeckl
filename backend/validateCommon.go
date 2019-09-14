@@ -10,7 +10,7 @@ func ValidUsername(input string) error {
 		return err
 	}
 
-	charset := alphaNumSet + "-_."
+	charset := alphaNumSet + germanSet + "-_."
 
 	if !WithinSet(charset, input) {
 		return fmt.Errorf("%s may only contain the following characters: %s", input, charset)
@@ -32,7 +32,7 @@ func ValidEmail(input string) error {
 		return err
 	}
 
-	charset := alphaNumSet + "@-_+."
+	charset := alphaNumSet + germanSet + "@-_+."
 
 	if !WithinSet(charset, input) {
 		return fmt.Errorf("%s may only contain the following characters: %s", input, charset)

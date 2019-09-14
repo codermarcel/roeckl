@@ -13,6 +13,7 @@ func WithinSet(set string, stringToCheck string) bool {
 }
 
 const alphaNumSet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+const germanSet = "ÄÖÜßäüöé"
 
 func IsAlnum(stringToCheck string) bool {
 	return WithinSet(alphaNumSet, stringToCheck)

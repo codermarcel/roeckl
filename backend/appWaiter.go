@@ -18,8 +18,8 @@ func (a App) WaiterPurchase(c echo.Context) error {
 		return c.JSON(http.StatusOK, BadRequest(err.Error()))
 	}
 
-	if len(u.Products) > 30 {
-		return c.JSON(http.StatusOK, Fail("You can't purchase more than 10 products at a time"))
+	if len(u.Products) > 50 {
+		return c.JSON(http.StatusOK, Fail("You can't purchase more than 50 products at a time"))
 	}
 
 	if len(u.Products) < 1 {
@@ -31,8 +31,8 @@ func (a App) WaiterPurchase(c echo.Context) error {
 			return c.JSON(http.StatusOK, Fail(fmt.Sprintf("can not purchase less than 1 of product with id %s", x.ID)))
 		}
 
-		if x.Quantity > 10 {
-			return c.JSON(http.StatusOK, Fail(fmt.Sprintf("can not purchase more than 10 of product with id %s", x.ID)))
+		if x.Quantity > 50 {
+			return c.JSON(http.StatusOK, Fail(fmt.Sprintf("can not purchase more than 50 of product with id %s", x.ID)))
 		}
 	}
 
