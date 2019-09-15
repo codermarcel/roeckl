@@ -37,7 +37,7 @@ class OrderItem extends React.Component<OrderProps> {
                 ))}
 
                 <Table.Row>
-                    <Table.Cell></Table.Cell>
+                    {/* <Table.Cell></Table.Cell> */}
                     <Table.Cell></Table.Cell>
                     <Table.Cell> <strong>Total:</strong></Table.Cell>
                     <Table.Cell> <strong>{config.formatPrice(totalPaid)}</strong></Table.Cell>

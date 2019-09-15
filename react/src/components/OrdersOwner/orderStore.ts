@@ -1,5 +1,5 @@
 import { action, computed, observable } from "mobx";
-import { convertUnixToDate } from "../../helpers/time";
+import { convertUnixToDate, convertUnixToDateWithoutMinutes } from "../../helpers/time";
 import axiosInstane from "../../stores/axios";
 import config from "../../stores/config";
 import msgStore from "../../stores/message";
@@ -29,10 +29,12 @@ export class OrderStore {
 
     get testDataArray() {
         let testData: OrderInterface[] = []
-        let t1 = {id: "12345", user_id: "userid", created_at: 1565000212, updated_at: 1565000212, status: "paid", total_cost: 5, table_id: 2}
-        testData.push({...t1, created_at: 1552780800, total_cost: 1000})
-        testData.push({...t1, created_at: 1552867200, total_cost: 2000})
-        testData.push({...t1, created_at: 1552953600, total_cost: 3000})
+        let t1 = {id: "12345", user_id: "testuser", created_at: 1565000212, updated_at: 1565000212, status: "paid", total_cost: 5, table_id: 2}
+        testData.push({...t1, created_at: 1563148800, total_cost: 1000}) //july 15
+        testData.push({...t1, created_at: 1565827200, total_cost: 2000}) //august 15
+        this.ordersArray.forEach((value) => {
+            testData.push(value) //current orders
+        })
         return testData
     }
 
@@ -43,7 +45,7 @@ export class OrderStore {
             if (order.status !== StatusPaid) {
                 return
             }
-            let date = convertUnixToDate(order.created_at)
+            let date = convertUnixToDateWithoutMinutes(order.created_at)
             let item = dat.get(date)
             if (item === undefined) {
                 dat.set(date, order.total_cost)

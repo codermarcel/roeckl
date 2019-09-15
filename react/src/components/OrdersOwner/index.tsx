@@ -31,7 +31,7 @@ class TestApp extends React.Component<RouteComponentProps> {
         const pieChart = (
             <Card fluid>
                 <Card.Content>
-                <Card.Header textAlign="center">Earnings per Table in Euro</Card.Header>
+                <Card.Header textAlign="center">Earnings per Table in Euro (Stauts: Paid)</Card.Header>
                 <Card.Meta>
                     {/* <span className='date'>Joined in 2015</span> */}
                 </Card.Meta>
@@ -97,7 +97,7 @@ class LineChartComp extends React.Component {
         return (
             <Card fluid>
                 <Card.Content>
-                <Card.Header textAlign="center">Earnings over time</Card.Header>
+                <Card.Header textAlign="center">Earnings over time (Status: Paid)</Card.Header>
                 <Card.Meta>
                 </Card.Meta>
                 <Card.Description>

@@ -3,12 +3,16 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"roeckl/backend/token"
 	"strconv"
 	"strings"
 
+	"flag"
+
 	"github.com/gobuffalo/packr"
-	"github.com/namsral/flag"
+	"github.com/joho/godotenv"
+	"github.com/mholt/certmagic"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -30,6 +34,8 @@ func main() {
 	var dbconnection string
 	var dbdriver string
 	var jwtexpireminutes string
+	var tlsenabled bool
+	domains := []string{"3m4u.tk", "www.3m4u.tk"}
 
 	flag.BoolVar(&debug, "debug", true, "enable debug mode")
 	flag.BoolVar(&migrateUp, "up", false, "run the up migrations")
@@ -41,7 +47,21 @@ func main() {
 	flag.StringVar(&dbconnection, "dbconnection", "test.db", "the connection string for the database driver")
 	flag.StringVar(&dbdriver, "dbdriver", "sqlite3", "the database driver, for example sqlite3, mysql, postgres")
 	flag.StringVar(&jwtexpireminutes, "jwtexpireminutes", "300", "in how many minutes should this jwt expire")
+	flag.BoolVar(&tlsenabled, "tlsenabled", true, "enable https")
 	flag.Parse()
+
+	godotenv.Load(".env")
+	godotenv.Overload(".env.local")
+
+	value, found := os.LookupEnv("TLSENABLED")
+	if found {
+		if value == "true" {
+			tlsenabled = true
+		}
+		if value == "false" {
+			tlsenabled = false
+		}
+	}
 
 	if fresh {
 		migrateDown = true
@@ -83,13 +103,8 @@ func main() {
 
 	ec := echo.New()
 	box := packr.NewBox("../react/build")
-	// fs := http.FileServer(box)
 
 	static(box, ec, "/", "")
-
-	// ec.Any("/*", echo.WrapHandler(fs))
-
-	// ec.Static("/", "build")
 
 	ec.HTTPErrorHandler = func(err error, c echo.Context) {
 		if c.Request().URL == nil {
@@ -97,15 +112,12 @@ func main() {
 			return
 		}
 
-		fmt.Println("inside the HTTPErrorHandler")
-
 		if !strings.HasPrefix(c.Request().URL.Path, backendApiPrefix) {
 			b, err := box.Find("index.html")
 			if err != nil {
 				return
 			}
 			c.Blob(http.StatusOK, "text/html", b)
-			// c.File("build/index.html")
 			return
 		}
 
@@ -120,7 +132,7 @@ func main() {
 	ec.Debug = debug
 	ec.HideBanner = true
 	fmt.Println("-----Configuration-----")
-	fmt.Printf("Fresh: %t\nDebug: %t\n Port: %s\n", fresh, debug, port)
+	fmt.Printf("Fresh: %t\nDebug: %t\n Port: %s\nTLSEnabled: %t \n", fresh, debug, port, tlsenabled)
 	fmt.Println("-----Configuration-----")
 
 	e := ec.Group(backendApiPrefix)
@@ -159,6 +171,13 @@ func main() {
 	chef.Any("/order", app.ChefListOrder)
 	chef.Any("/orders", app.ChefListOrders)
 	chef.Any("/order/cancel", app.ChefCancelOrder)
+
+	if tlsenabled {
+		certmagic.Default.Agreed = true
+		certmagic.Default.CA = certmagic.LetsEncryptProductionCA
+		fmt.Println("serving https")
+		ec.Logger.Fatal(certmagic.HTTPS(domains, ec))
+	}
 
 	ec.Logger.Fatal(ec.Start(":" + port))
 }
