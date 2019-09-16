@@ -99,6 +99,26 @@ func (a App) OwnerListOrder(c echo.Context) error {
 	return c.JSON(http.StatusOK, Success("Success!", orders))
 }
 
+func (a App) OwnerGetUserDetails(c echo.Context) error {
+	_, ok := GetUserId(c)
+	if !ok {
+		return c.JSON(http.StatusOK, FailNotAuthenticated())
+	}
+
+	u := &GetUserDetailsRequest{}
+	if err := c.Bind(u); err != nil {
+		return c.JSON(http.StatusOK, BadRequest(err.Error()))
+	}
+
+	user, err := a.UserRepo.FindById(u.UserID)
+
+	if err != nil {
+		return c.JSON(http.StatusOK, Fail("could not find user details"))
+	}
+
+	return c.JSON(http.StatusOK, Success("Success!", user))
+}
+
 func (a App) OwnerListOrders(c echo.Context) error {
 	_, ok := GetUserId(c)
 	if !ok {

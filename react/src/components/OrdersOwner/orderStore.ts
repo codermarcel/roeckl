@@ -107,7 +107,6 @@ export class OrderStore {
     }
 
     @action.bound loadOrders() {
-       
         const data = {page: this.page}
 
         axiosInstane.post("/owner/orders?page=" +this.page, data)

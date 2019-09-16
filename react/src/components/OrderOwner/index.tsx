@@ -43,10 +43,11 @@ class TestApp extends React.Component<RouteComponentProps> {
         const cancelFunc = store.cancelOrder
         const markAsPaidFunc = store.markOrderAsPaid
         const status = order.status
-
+        const userid = order.user_id
 
         return (
             <OrderPage 
+                userid={userid}
                 orderDetails={{products,totalPaid}}
                 orderID={orderID}
                 unixPurchase={unixPurchase} 

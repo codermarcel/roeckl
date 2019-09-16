@@ -76,6 +76,10 @@ type ListOrderRequest struct {
 	OrderID string `json:"order_id" form:"order_id" query:"order_id"`
 }
 
+type GetUserDetailsRequest struct {
+	UserID string `json:"user_id" form:"user_id" query:"user_id"`
+}
+
 type WaiterPurchaseProductsRequest struct {
 	ExpectedPrice int64                         `json:"expectedPrice"`
 	TableID       int64                         `json:"tableid"`

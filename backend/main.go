@@ -166,6 +166,7 @@ func main() {
 	owner.Any("/categories", app.OwnerListCategories)
 	owner.Any("/product/delete", app.OwnerDeleteProduct)
 	owner.Any("/product/update", app.OwnerUpdateProduct)
+	owner.Any("/user/details", app.OwnerGetUserDetails)
 
 	chef := e.Group("/chef", app.EnsureAuthenticated, app.EnsureHasRole(string(ChefRole)))
 	chef.Any("/order", app.ChefListOrder)
