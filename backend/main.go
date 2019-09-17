@@ -37,19 +37,6 @@ func main() {
 	var tlsenabled bool
 	domains := []string{"3m4u.tk", "www.3m4u.tk"}
 
-	flag.BoolVar(&debug, "debug", true, "enable debug mode")
-	flag.BoolVar(&migrateUp, "up", false, "run the up migrations")
-	flag.BoolVar(&migrateDown, "down", false, "run the down migrations")
-	flag.BoolVar(&seed, "seed", false, "seed the database")
-	flag.BoolVar(&fresh, "fresh", false, "run the down migration, run the up migration and then seed the database")
-	flag.StringVar(&port, "port", "1111", "the port that this app should listen on")
-	flag.StringVar(&secret, "secret", "12345678901234567890123456789012", "the application secret, used for jwt validation")
-	flag.StringVar(&dbconnection, "dbconnection", "test.db", "the connection string for the database driver")
-	flag.StringVar(&dbdriver, "dbdriver", "sqlite3", "the database driver, for example sqlite3, mysql, postgres")
-	flag.StringVar(&jwtexpireminutes, "jwtexpireminutes", "300", "in how many minutes should this jwt expire")
-	flag.BoolVar(&tlsenabled, "tlsenabled", true, "enable https")
-	flag.Parse()
-
 	godotenv.Load(".env")
 	godotenv.Overload(".env.local")
 
@@ -62,6 +49,19 @@ func main() {
 			tlsenabled = false
 		}
 	}
+
+	flag.BoolVar(&debug, "debug", true, "enable debug mode")
+	flag.BoolVar(&migrateUp, "up", false, "run the up migrations")
+	flag.BoolVar(&migrateDown, "down", false, "run the down migrations")
+	flag.BoolVar(&seed, "seed", false, "seed the database")
+	flag.BoolVar(&fresh, "fresh", false, "run the down migration, run the up migration and then seed the database")
+	flag.StringVar(&port, "port", "1111", "the port that this app should listen on")
+	flag.StringVar(&secret, "secret", "12345678901234567890123456789012", "the application secret, used for jwt validation")
+	flag.StringVar(&dbconnection, "dbconnection", "test.db", "the connection string for the database driver")
+	flag.StringVar(&dbdriver, "dbdriver", "sqlite3", "the database driver, for example sqlite3, mysql, postgres")
+	flag.StringVar(&jwtexpireminutes, "jwtexpireminutes", "300", "in how many minutes should this jwt expire")
+	flag.BoolVar(&tlsenabled, "tlsenabled", tlsenabled, "enable https")
+	flag.Parse()
 
 	if fresh {
 		migrateDown = true
