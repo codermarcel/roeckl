@@ -22,9 +22,13 @@ export function convertUnixToDate(UNIX_timestamp){
     var hour = a.getHours();
     // var sec = a.getSeconds();
     var min = "0" + a.getMinutes();
-    var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min;
-    var timeAlt = date + '.' + a.getMonth() + '.' + year + ' ' + hour + ':' + min.substr(-2);
+    var t = min.substr(-2)
+    var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + t;
+    var timeAlt = date + '.' + a.getMonth() + '.' + year + ' ' + hour + ':' + t;
     return time;
 }
 
 // console.log("test time", convertUnixToDate(1568804800))
+// console.log("test time2", convertUnixToDate(1568805357))
+
+
