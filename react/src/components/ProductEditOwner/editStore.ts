@@ -17,7 +17,6 @@ export class EditStore {
     @observable descriptionError = null
     @observable priceError = null
     @observable quantityError = null
-    @observable enabledError = null
     @observable categoryError = null
 
     @action.bound setID(input: string) {
@@ -69,7 +68,7 @@ export class EditStore {
             id: this.id,
             price: this.price,
             quantity: this.quantity,
-            enabled: this.enabled,
+            disabled: !this.enabled,
             description: this.description,
             name: this.name,
             category: this.category
