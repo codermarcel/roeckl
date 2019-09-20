@@ -11,7 +11,7 @@ func ValidProductCategory(input string) error {
 		return err
 	}
 
-	charset := alphaNumSet + "-_. "
+	charset := alphaNumSet + germanSet + "-_. "
 
 	if !WithinSet(charset, input) {
 		return fmt.Errorf("%s may only contain the following characters: %s", name, charset)
@@ -26,7 +26,7 @@ func ValidProductName(input string) error {
 		return err
 	}
 
-	charset := alphaNumSet + "-_. "
+	charset := alphaNumSet + germanSet + "-_. "
 
 	if !WithinSet(charset, input) {
 		return fmt.Errorf("%s may only contain the following characters: %s", name, charset)
@@ -48,7 +48,7 @@ func ValidProductDescription(input string) error {
 		return err
 	}
 
-	charset := alphaNumSet + "@-_+. "
+	charset := alphaNumSet + germanSet + "@-_+. "
 
 	if !WithinSet(charset, input) {
 		return fmt.Errorf("%s may only contain the following characters: %s", input, charset)
