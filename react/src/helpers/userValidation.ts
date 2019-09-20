@@ -1,6 +1,6 @@
 type retType = {content: string}
 export function checkEmail(input: string): retType {
-    if (!input || input.length < 8 || input.length > 40) {
+    if (!input || input.length < 8 || input.length > 50) {
         return {content: "Email needs to be at least 8 and at most 40 characters long"}
     }
     if (!input.includes("@") || !input.includes(".")) {
@@ -11,7 +11,7 @@ export function checkEmail(input: string): retType {
 }
 
 export function checkUsername(input: string): retType {
-    if (!input || input.length < 5 || input.length > 30) {
+    if (!input || input.length < 5 || input.length > 40) {
         return {content: "Username needs to be at least 5 and at most 30 characters long"}
     }
     

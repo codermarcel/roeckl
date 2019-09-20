@@ -14,7 +14,7 @@ export function ValidName(input: string): validationContent {
 }
 
 export function ValidCategory(input: string): validationContent {
-    const result = ValidLength(input, "Product Category", 5, 30)
+    const result = ValidLength(input, "Product Category", 5, 50)
 
     if (result !== null) {
         return result
@@ -24,7 +24,7 @@ export function ValidCategory(input: string): validationContent {
 }
 
 export function ValidDescription(input: string): validationContent {
-    const result = ValidLength(input, "Product Description", 10, 99)
+    const result = ValidLength(input, "Product Description", 10, 300)
 
     if (result !== null) {
         return result
