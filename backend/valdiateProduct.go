@@ -48,7 +48,7 @@ func ValidProductDescription(input string) error {
 		return err
 	}
 
-	charset := alphaNumSet + germanSet + "@-_+. "
+	charset := alphaNumSet + germanSet + "@-_+. s"
 
 	if !WithinSet(charset, input) {
 		return fmt.Errorf("%s may only contain the following characters: %s", input, charset)
